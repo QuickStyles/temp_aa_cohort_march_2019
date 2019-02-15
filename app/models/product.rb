@@ -6,6 +6,8 @@ class Product < ApplicationRecord
   before_save :capitalize_product_title
   # validate: (:set_default_value_price)
 
+  scope(:search, ->(query) { where("title ILIKE ?", "%#{query}%") })
+  
   private
 
   def set_default_value_price
