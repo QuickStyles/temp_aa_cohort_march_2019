@@ -2,6 +2,7 @@ class Review < ApplicationRecord
   # This file was generated (including the `belongs_to :product`) by running
   # following command in the command-line:
   # > rails g model review rating:integer body:text product:references
+  belongs_to :user
   belongs_to :product
 
 

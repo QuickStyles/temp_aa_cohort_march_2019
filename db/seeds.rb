@@ -9,7 +9,34 @@
 # Make sure to clear old data out of your db when you run rails db:seed
 # In this case, Reviews will also be deleted since Product.destroy_all will
 # run our 'dependent: :destroy' callback.
-Product.destroy_all()
+# Product.destroy_all()
+
+# Now we'll use delete_all and just include all
+# objects that need deleting.
+Review.delete_all
+Product.delete_all
+User.delete_all
+
+User.create(
+  first_name: 'Seed',
+  last_name: 'User',
+  email: 'seed@seed.com',
+  password: 'supersecret'
+)
+
+10.times do |num|
+  full_name = Faker::TvShows::SiliconValley.character.split(' ')
+  first_name = full_name[0]
+  last_name = full_name[1]
+  User.create(
+    first_name: first_name,
+    last_name: last_name,
+    email: "#{first_name}.#{last_name}-#{num}@piedpiper.com",
+    password: 'supersecret'
+  )
+end
+
+users = User.all
 
 500.times do
   created_at = Faker::Date.backward(365 * 5)
@@ -18,7 +45,8 @@ Product.destroy_all()
     description: Faker::Cannabis.health_benefit,
     price: rand(100_000),
     created_at: created_at,
-    updated_at: created_at
+    updated_at: created_at,
+    user: users.sample
   })
 
   if p.valid?
@@ -26,11 +54,13 @@ Product.destroy_all()
       Review.create(
         rating: Faker::Number.between(1, 5),
         body: Faker::TvShows::Seinfeld.quote,
-        product: p
+        product: p,
+        user: users.sample
       )
     end
   end
 end
 
+puts "Created #{User.count} users"
 puts "Created #{Product.count} products"
 puts "Created #{Review.count} reviews"
