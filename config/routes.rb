@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     resources :reviews, shallow: true, only: [:create, :destroy]
   end
 
+  patch "/reviews/:id/toggle" => "reviews#toggle_hidden", as: "toggle_hidden"
+
   root 'welcome#index'
   get('/about', { to: 'welcome#about', as: :about })
   get('/contact_us', { to: 'contacts#index', as: :contact })
