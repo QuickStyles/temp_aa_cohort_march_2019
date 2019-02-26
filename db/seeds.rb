@@ -6,16 +6,31 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+# Make sure to clear old data out of your db when you run rails db:seed
+# In this case, Reviews will also be deleted since Product.destroy_all will
+# run our 'dependent: :destroy' callback.
 Product.destroy_all()
-1000.times do
+
+500.times do
   created_at = Faker::Date.backward(365 * 5)
-  Product.create({
+  p = Product.create({
     title: Faker::Cannabis.strain,
     description: Faker::Cannabis.health_benefit,
     price: rand(100_000),
     created_at: created_at,
     updated_at: created_at
   })
+
+  if p.valid?
+    rand(0..10).times.each do
+      Review.create(
+        rating: Faker::Number.between(1, 5),
+        body: Faker::TvShows::Seinfeld.quote,
+        product: p
+      )
+    end
+  end
 end
 
-puts 'created 1000 products!'
+puts "Created #{Product.count} products"
+puts "Created #{Review.count} reviews"
