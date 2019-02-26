@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   # on a single thing. There will be no index route or any
   # route with :id. When using singular resource, the controller
   # it links to should still be plural.
-  resource :session, only: [:new, :create]
+  resource :session, only: [:new, :create, :destroy]
 
   resources :products do
     # creates the following route for us:
